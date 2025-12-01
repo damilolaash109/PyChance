@@ -1,1 +1,41 @@
-
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Roulette</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script>
+async function playRoulette() {
+    const type = document.getElementById('bet_type').value;
+    const value = document.getElementById('bet_value').value;
+    const stake = document.getElementById('stake').value;
+    const res = await fetch('/api/roulette', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bet_type: type, bet_value: value, stake })
+    });
+    const data = await res.json();
+    if (data.error) {
+        alert(data.error);
+    } else {
+        alert(`Number: ${data.result_number} | Color: ${data.result_color}\nPayout: ₦${data.payout}\nBalance: ₦${data.balance}`);
+    }
+}
+</script>
+</head>
+<body>
+<h2>Roulette</h2>
+<form onsubmit="event.preventDefault(); playRoulette();">
+  <label>Bet Type:
+    <select id="bet_type">
+      <option value="number">Number</option>
+      <option value="color">Color</option>
+    </select>
+  </label><br><br>
+  <label>Value: <input id="bet_value" placeholder="e.g. 7 or red"></label><br><br>
+  <label>Stake: <input type="number" id="stake" value="1" min="1"></label><br><br>
+  <button type="submit">Spin</button>
+</form>
+<a href="{{ url_for('index') }}">Back</a>
+</body>
+</html>
