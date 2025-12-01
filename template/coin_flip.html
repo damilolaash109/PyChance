@@ -1,1 +1,35 @@
-
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Coin Flip</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script>
+async function playCoinflip() {
+    const choice = document.querySelector('input[name="choice"]:checked').value;
+    const stake = document.getElementById('stake').value;
+    const res = await fetch('/api/coinflip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ choice, stake })
+    });
+    const data = await res.json();
+    if (data.error) {
+        alert(data.error);
+    } else {
+        alert(`Result: ${data.result}\nPayout: ₦${data.payout}\nBalance: ₦${data.balance}`);
+    }
+}
+</script>
+</head>
+<body>
+<h2>Coin Flip</h2>
+<form onsubmit="event.preventDefault(); playCoinflip();">
+  <label><input type="radio" name="choice" value="heads" checked> Heads</label>
+  <label><input type="radio" name="choice" value="tails"> Tails</label><br><br>
+  <label>Stake: <input type="number" id="stake" value="1" min="1"></label><br><br>
+  <button type="submit">Flip</button>
+</form>
+<a href="{{ url_for('index') }}">Back</a>
+</body>
+</html>
