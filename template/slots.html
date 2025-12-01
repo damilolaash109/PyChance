@@ -1,1 +1,32 @@
-
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Slots</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script>
+async function playSlots() {
+    const stake = document.getElementById('stake').value;
+    const res = await fetch('/api/slots', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stake })
+    });
+    const data = await res.json();
+    if (data.error) {
+        alert(data.error);
+    } else {
+        alert(`Reels: ${data.reels.join(' | ')}\nPayout: ₦${data.payout}\nBalance: ₦${data.balance}`);
+    }
+}
+</script>
+</head>
+<body>
+<h2>Slots</h2>
+<form onsubmit="event.preventDefault(); playSlots();">
+  <label>Stake: <input type="number" id="stake" value="1" min="1"></label><br><br>
+  <button type="submit">Spin</button>
+</form>
+<a href="{{ url_for('index') }}">Back</a>
+</body>
+</html>
