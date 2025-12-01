@@ -1,1 +1,30 @@
 
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PyChance</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+<header>
+  <h1>Welcome to PyChance</h1>
+  {% if current_user.is_authenticated %}
+    <p>Hello, {{ current_user.username }} | Balance: ₦{{ current_user.wallet.balance }}</p>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  {% else %}
+    <a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Register</a>
+  {% endif %}
+</header>
+
+<main>
+  <h2>Choose a game</h2>
+  <ul>
+    <li><a href="{{ url_for('coinflip_page') }}">Coin Flip</a></li>
+    <li><a href="{{ url_for('roulette_page') }}">Roulette</a></li>
+    <li><a href="{{ url_for('slots_page') }}">Slots</a></li>
+  </ul>
+</main>
+</body>
+</html>
